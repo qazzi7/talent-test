@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>🌸 天赋挖掘小测试 · 发现你的隐藏超能力</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: linear-gradient(135deg, #ffeef8 0%, #fff5e6 50%, #e6f7ff 100%);
+    min-height: 100vh;
+    color: #4a3f5c;
+    line-height: 1.7;
+    padding: 16px;
+    overflow-x: hidden;
+  }
+  .container { max-width: 560px; margin: 0 auto; }
+
+  /* 头部 */
+  header {
+    text-align: center;
+    padding: 35px 20px 25px;
+    background: linear-gradient(135deg, #ffd6e8 0%, #ffe9c7 100%);
+    border-radius: 28px;
+    box-shadow: 0 10px 40px rgba(255, 182, 193, 0.3);
+    border: 3px solid #fff;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: "✨🌟🌸";
+    position: absolute;
+    top: 8px; right: 12px;
+    font-size: 1.2rem;
+    opacity: 0.7;
+  }
+  header h1 {
+    font-size: clamp(1.4rem, 6vw, 2rem);
+    color: #d63384;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 0 #fff;
+  }
+  header .subtitle {
+    font-size: clamp(0.82rem, 3vw, 0.98rem);
+    color: #7a5c8a;
+    background: rgba(255,255,255,0.6);
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 16px;
+  }
+
+  /* 卡片 */
+  .card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px 20px;
+    box-shadow: 0 8px 28px rgba(180,120,160,0.15);
+    border: 2px solid #ffe0f0;
+    margin-bottom: 20px;
+  }
+
+  /* 开始页 */
+  .intro { text-align: center; }
+  .intro .big-emoji { font-size: 4rem; display: block; margin-bottom: 12px; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .intro h2 { color: #d63384; font-size: 1.4rem; margin-bottom: 10px; }
+  .intro p { color: #6a5a7a; font-size: 0.92rem; margin-bottom: 18px; }
+  .intro .info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 18px 0;
+  }
+  .info-item {
+    background: linear-gradient(135deg, #fff0f6, #fff5e6);
+    padding: 12px 6px;
+    border-radius: 14px;
+    font-size: 0.78rem;
+    color: #7a5c8a;
+  }
+  .info-item .num { font-size: 1.3rem; font-weight: 700; color: #d63384; display: block; }
+
+  /* 按钮 */
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff8ec1, #ff5577);
+    color: #fff;
+    border: none;
+    padding: 14px 40px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(214,51,132,0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(214,51,132,0.45); }
+  .btn:active { transform: translateY(0); }
+  .btn-secondary {
+    background: linear-gradient(135deg, #8ec9ff, #5588dd);
+    box-shadow: 0 6px 20px rgba(85,136,221,0.3);
+  }
+
+  /* 进度条 */
+  .progress-wrap { margin-bottom: 18px; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #9a8aaa;
+    margin-bottom: 6px;
+  }
+  .progress-bar {
+    height: 10px;
+    background: #f0e8f5;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff8ec1, #ffb84d);
+    border-radius: 5px;
+    transition: width 0.4s ease;
+  }
+
+  /* 题目 */
+  .q-num { color: #d63384; font-weight: 700; font-size: 0.9rem; }
+  .question {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #5a3a6e;
+    margin: 10px 0 18px;
+    line-height: 1.6;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    background: #fff8fc;
+    border: 2px solid #ffe0f0;
+    border-radius: 16px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: left;
+    font-size: 0.95rem;
+    color: #5a4a6a;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .option:hover { border-color: #ffb3d1; background: #fff0f6; transform: translateX(3px); }
+  .option.selected {
+    border-color: #ff8ec1;
+    background: linear-gradient(135deg, #fff0f6, #ffe9f2);
+    box-shadow: 0 4px 12px rgba(255,142,193,0.2);
+  }
+  .option .opt-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: #ffe0f0;
+    color: #d63384;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  /* 结果页 */
+  .result-header { text-align: center; margin-bottom: 20px; }
+  .result-emoji { font-size: 4.5rem; display: block; margin-bottom: 8px; animation: pop 0.6s ease; }
+  @keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.2); } 100% { transform: scale(1); } }
+  .result-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #d63384;
+    margin-bottom: 6px;
+  }
+  .result-tagline { color: #7a5c8a; font-size: 0.92rem; }
+
+  .dim-section { margin: 20px 0; }
+  .dim-section h3 {
+    font-size: 1rem;
+    color: #d63384;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .dim-item { margin-bottom: 12px; }
+  .dim-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    margin-bottom: 5px;
+  }
+  .dim-name { color: #5a4a6a; font-weight: 600; }
+  .dim-score { color: #d63384; font-weight: 700; }
+  .dim-bar {
+    height: 10px;
+    background: #f0e8f5;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .dim-bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.8s ease;
+  }
+
+  .advice-box {
+    background: linear-gradient(135deg, #fff0f6 0%, #fff5e6 100%);
+    border-radius: 18px;
+    padding: 16px;
+    margin: 16px 0;
+    border-left: 5px solid #ffb84d;
+  }
+  .advice-box h4 { color: #e08a2e; margin-bottom: 8px; font-size: 0.98rem; }
+  .advice-box p { color: #6a5a7a; font-size: 0.88rem; margin: 5px 0; }
+
+  .action-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  .action-row .btn { padding: 12px 28px; font-size: 0.95rem; }
+
+  /* 工具提示 */
+  .disclaimer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #b0a0c0;
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  /* 移动端 */
+  @media (max-width: 480px) {
+    body { padding: 12px; }
+    .card { padding: 20px 16px; border-radius: 20px; }
+    header { padding: 28px 16px 20px; border-radius: 22px; }
+    .intro .big-emoji { font-size: 3.2rem; }
+    .option { padding: 12px 14px; font-size: 0.9rem; }
+    .btn { padding: 12px 32px; font-size: 1rem; }
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>🌸 天赋挖掘小测试</h1>
+    <p class="subtitle">发现你的隐藏超能力 ✨</p>
+  </header>
+
+  <!-- 开始页 -->
+  <div id="start-screen" class="card intro">
+    <span class="big-emoji">🔮</span>
+    <h2>你天生擅长什么？</h2>
+    <p>每个人都有自己独特的天赋，只是还没被发现而已~<br>用 8 道小题目，找出属于你的天赋组合吧！</p>
+    <div class="info-grid">
+      <div class="info-item"><span class="num">8</span>道题目</div>
+      <div class="info-item"><span class="num">3</span>分钟</div>
+      <div class="info-item"><span class="num">6</span>维天赋</div>
+    </div>
+    <button class="btn" onclick="startTest()">开始测试 🚀</button>
+    <p class="disclaimer">本测试仅供娱乐参考，结果不代表专业评估</p>
+  </div>
+
+  <!-- 测试页 -->
+  <div id="test-screen" class="card hidden">
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span>题目 <span id="q-current">1</span> / 8</span>
+        <span id="q-percent">12%</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width:12.5%"></div>
+      </div>
+    </div>
+    <div class="q-num" id="q-label">第 1 题</div>
+    <div class="question" id="question-text"></div>
+    <div class="options" id="options-list"></div>
+  </div>
+
+  <!-- 结果页 -->
+  <div id="result-screen" class="card hidden">
+    <div class="result-header">
+      <span class="result-emoji" id="result-emoji">🌟</span>
+      <div class="result-title" id="result-title">你的天赋画像</div>
+      <div class="result-tagline" id="result-tagline"></div>
+    </div>
+
+    <div class="dim-section">
+      <h3>📊 六大天赋维度</h3>
+      <div id="dim-list"></div>
+    </div>
+
+    <div class="advice-box">
+      <h4>💡 给你的专属建议</h4>
+      <div id="advice-content"></div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn" onclick="restart()">再测一次 🔄</button>
+      <button class="btn btn-secondary" onclick="shareResult()">分享结果 📤</button>
+    </div>
+    <p class="disclaimer">结果仅供娱乐，每个人都是独一无二的小星星 ✨</p>
+  </div>
+
+</div>
+
+<script>
+// 题目数据：每题有6个维度计分
+// 维度: C=创造力, L=逻辑, W=语言, M=运动, S=社交, A=艺术
+const questions = [
+  {
+    q: "周末有空的时候，你最想做哪件事？",
+    opts: [
+      { t: "画一幅画 / 玩乐器 / 写点东西", s: { C: 2, A: 2 } },
+      { t: "解一道有趣的谜题或玩策略游戏", s: { L: 2 } },
+      { t: "约朋友出去玩，聊聊天", s: { S: 2 } },
+      { t: "去运动、跳舞或户外活动", s: { M: 2 } },
+      { t: "读一本好书或看纪录片", s: { W: 2, L: 1 } },
+      { t: "研究一个新工具 / 小发明", s: { C: 1, L: 1 } }
+    ]
+  },
+  {
+    q: "在团队合作中，你通常扮演什么角色？",
+    opts: [
+      { t: "出点子的创意担当", s: { C: 2 } },
+      { t: "负责分析和决策的人", s: { L: 2 } },
+      { t: "调节气氛、凝聚大家的人", s: { S: 2 } },
+      { t: "动手执行、落地的人", s: { M: 1, L: 1 } },
+      { t: "负责沟通表达和文案的人", s: { W: 2 } },
+      { t: "负责设计和审美把关", s: { A: 2 } }
+    ]
+  },
+  {
+    q: "下面哪门课你最得心应手？",
+    opts: [
+      { t: "语文 / 英语 / 写作", s: { W: 2 } },
+      { t: "数学 / 物理 / 编程", s: { L: 2 } },
+      { t: "美术 / 音乐 / 设计", s: { A: 2, C: 1 } },
+      { t: "体育 / 舞蹈 / 手工", s: { M: 2 } },
+      { t: "历史 / 政治 / 心理学", s: { S: 1, W: 1 } },
+      { t: "社团活动 / 演讲辩论", s: { S: 2 } }
+    ]
+  },
+  {
+    q: "朋友遇到难题来找你，你会？",
+    opts: [
+      { t: "认真听他倾诉，共情安慰", s: { S: 2 } },
+      { t: "帮他分析利弊，给出方案", s: { L: 2 } },
+      { t: "用幽默的方式逗他开心", s: { C: 1, S: 1 } },
+      { t: "陪他出去走走、散散心", s: { M: 1, S: 1 } },
+      { t: "写一段暖心的话给他", s: { W: 2 } },
+      { t: "推荐一首歌或一部电影", s: { A: 1, W: 1 } }
+    ]
+  },
+  {
+    q: "你最容易被什么吸引？",
+    opts: [
+      { t: "有创意的设计和艺术作品", s: { A: 2, C: 1 } },
+      { t: "逻辑清晰、有深度的观点", s: { L: 2 } },
+      { t: "真挚动人的故事和文字", s: { W: 2 } },
+      { t: "充满活力的运动和表演", s: { M: 2 } },
+      { t: "温暖有爱的人际关系", s: { S: 2 } },
+      { t: "新奇有趣的黑科技", s: { C: 1, L: 1 } }
+    ]
+  },
+  {
+    q: "如果让你在舞台上表演，你会选？",
+    opts: [
+      { t: "唱歌 / 演奏乐器", s: { A: 2 } },
+      { t: "跳舞 / 武术表演", s: { M: 2, A: 1 } },
+      { t: "演讲 / 朗诵 / 脱口秀", s: { W: 2, S: 1 } },
+      { t: "魔术 / 即兴创意表演", s: { C: 2 } },
+      { t: "带领大家做互动游戏", s: { S: 2 } },
+      { t: "在幕后做策划和导演", s: { L: 1, C: 1 } }
+    ]
+  },
+  {
+    q: "你解决问题时更依赖？",
+    opts: [
+      { t: "直觉和灵感", s: { C: 2 } },
+      { t: "数据和理性分析", s: { L: 2 } },
+      { t: "和别人讨论获取意见", s: { S: 2 } },
+      { t: "动手尝试和实践", s: { M: 1, L: 1 } },
+      { t: "查阅资料和阅读", s: { W: 2 } },
+      { t: "找参考案例模仿优化", s: { A: 1, C: 1 } }
+    ]
+  },
+  {
+    q: "你理想中的职业更偏向？",
+    opts: [
+      { t: "设计师 / 艺术家 / 音乐人", s: { A: 2, C: 1 } },
+      { t: "程序员 / 工程师 / 科学家", s: { L: 2 } },
+      { t: "教师 / 心理咨询 / 运营", s: { S: 2, W: 1 } },
+      { t: "运动员 / 舞者 / 手艺人", s: { M: 2 } },
+      { t: "作家 / 记者 / 编辑", s: { W: 2 } },
+      { t: "产品经理 / 创业者", s: { C: 1, L: 1, S: 1 } }
+    ]
+  }
+];
+
+const dimInfo = {
+  C: { name: "创造力", emoji: "💡", color: "linear-gradient(90deg, #ffb84d, #ff8ec1)" },
+  L: { name: "逻辑力", emoji: "🧠", color: "linear-gradient(90deg, #8ec9ff, #5588dd)" },
+  W: { name: "语言力", emoji: "📖", color: "linear-gradient(90deg, #a8e6cf, #56c596)" },
+  M: { name: "运动力", emoji: "🏃", color: "linear-gradient(90deg, #ffd3b6, #ff8b94)" },
+  S: { name: "社交力", emoji: "🤝", color: "linear-gradient(90deg, #ffaaa5, #ff8b94)" },
+  A: { name: "艺术力", emoji: "🎨", color: "linear-gradient(90deg, #c7b8ea, #9b8ec9)" }
+};
+
+const resultProfiles = [
+  { min: 0, max: 5, emoji: "🌱", title: "潜力探索者", tagline: "你的天赋正在悄悄发芽，多尝试不同领域吧~" },
+  { min: 5, max: 10, emoji: "⭐", title: "多元小能手", tagline: "你在多个领域都有不错的潜力，是个全面发展的小可爱！" },
+  { min: 10, max: 15, emoji: "🌟", title: "天赋闪耀者", tagline: "你的天赋组合很亮眼，找到优势方向就能闪闪发光！" },
+  { min: 15, max: 99, emoji: "💎", title: "宝藏天赋家", tagline: "你拥有非常突出的天赋领域，简直是被选中的孩子！" }
+];
+
+let currentQ = 0;
+let scores = { C: 0, L: 0, W: 0, M: 0, S: 0, A: 0 };
+let answers = [];
+
+function startTest() {
+  currentQ = 0;
+  scores = { C: 0, L: 0, W: 0, M: 0, S: 0, A: 0 };
+  answers = [];
+  document.getElementById("start-screen").classList.add("hidden");
+  document.getElementById("result-screen").classList.add("hidden");
+  document.getElementById("test-screen").classList.remove("hidden");
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[currentQ];
+  document.getElementById("q-current").textContent = currentQ + 1;
+  document.getElementById("q-label").textContent = `第 ${currentQ + 1} 题`;
+  document.getElementById("question-text").textContent = q.q;
+  const percent = Math.round(((currentQ + 1) / questions.length) * 100);
+  document.getElementById("q-percent").textContent = percent + "%";
+  document.getElementById("progress-fill").style.width = percent + "%";
+
+  const list = document.getElementById("options-list");
+  list.innerHTML = "";
+  const letters = ["A", "B", "C", "D", "E", "F"];
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "option";
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span>${opt.t}</span>`;
+    btn.onclick = () => selectOption(i, btn);
+    list.appendChild(btn);
+  });
+}
+
+function selectOption(idx, btnEl) {
+  const q = questions[currentQ];
+  const sel = q.opts[idx];
+  Object.keys(sel.s).forEach(k => { scores[k] += sel.s[k]; });
+  answers.push(idx);
+
+  document.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+  btnEl.classList.add("selected");
+
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) {
+      showQuestion();
+    } else {
+      showResult();
+    }
+  }, 350);
+}
+
+function showResult() {
+  document.getElementById("test-screen").classList.add("hidden");
+  document.getElementById("result-screen").classList.remove("hidden");
+
+  // 计算总分找画像
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+  const profile = resultProfiles.find(p => total >= p.min && total < p.max) || resultProfiles[resultProfiles.length - 1];
+  document.getElementById("result-emoji").textContent = profile.emoji;
+  document.getElementById("result-title").textContent = profile.title;
+  document.getElementById("result-tagline").textContent = profile.tagline;
+
+  // 渲染维度
+  const dimList = document.getElementById("dim-list");
+  dimList.innerHTML = "";
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  sorted.forEach(([key, val]) => {
+    const info = dimInfo[key];
+    const pct = Math.min(100, Math.round((val / 12) * 100));
+    const item = document.createElement("div");
+    item.className = "dim-item";
+    item.innerHTML = `
+      <div class="dim-top">
+        <span class="dim-name">${info.emoji} ${info.name}</span>
+        <span class="dim-score">${val} 分</span>
+      </div>
+      <div class="dim-bar"><div class="dim-bar-fill" style="width:0%;background:${info.color}"></div></div>
+    `;
+    dimList.appendChild(item);
+    setTimeout(() => {
+      item.querySelector(".dim-bar-fill").style.width = pct + "%";
+    }, 100);
+  });
+
+  // 建议
+  const topDim = sorted[0];
+  const secondDim = sorted[1];
+  const advice = generateAdvice(topDim[0], secondDim[0]);
+  document.getElementById("advice-content").innerHTML = advice;
+}
+
+function generateAdvice(topKey, secondKey) {
+  const top = dimInfo[topKey];
+  const second = dimInfo[secondKey];
+  const tips = {
+    C: "💡 你的创造力是最大宝藏！可以尝试写作、设计、短视频创作等领域，把奇思妙想变成作品。",
+    L: "🧠 你的逻辑分析能力很强！适合编程、数据分析、策划等需要理性思考的方向。",
+    W: "📖 你的语言天赋出众！可以尝试写作、翻译、演讲、运营文案等，用文字影响他人。",
+    M: "🏃 你的身体协调性很棒！舞蹈、体育、手工制作等需要动手能力的领域会让你大放异彩。",
+    S: "🤝 你的社交感知力很强！适合做教育、咨询、运营、销售等需要与人打交道的工作。",
+    A: "🎨 你的艺术感知力很敏锐！音乐、美术、设计、摄影等领域会让你找到热爱。"
+  };
+  return `
+    <p><strong>🌟 核心天赋：${top.emoji} ${top.name}</strong></p>
+    <p>${tips[topKey]}</p>
+    <p style="margin-top:10px"><strong>✨ 辅助天赋：${second.emoji} ${second.name}</strong></p>
+    <p>${tips[secondKey]}</p>
+    <p style="margin-top:12px;color:#9a8aaa;font-size:0.82rem">把这两个维度结合起来，你会找到最适合自己的赛道~ 加油呀！</p>
+  `;
+}
+
+function restart() {
+  document.getElementById("result-screen").classList.add("hidden");
+  document.getElementById("start-screen").classList.remove("hidden");
+}
+
+function shareResult() {
+  const title = document.getElementById("result-title").textContent;
+  const text = `🌸 我在【天赋挖掘小测试】测出是【${title}】！快来看看你的隐藏天赋吧~`;
+  if (navigator.share) {
+    navigator.share({ title: "天赋挖掘小测试", text: text, url: location.href }).catch(() => {});
+  } else {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); alert("结果文字已复制，快去分享吧~ ✨"); } catch(e) { alert(text); }
+    document.body.removeChild(ta);
+  }
+}
+</script>
+</body>
+</html>
